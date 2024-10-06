@@ -1,0 +1,612 @@
+[
+  {
+    "id": "0",
+    "name": "Umwandeln 1 -> 0 und 0 -> 1 ",
+    "description": "Diese Turing-Maschine transformiert alle Einsen in Nullen und alle Nullen in Einsen.",
+    "states": ["Q0", "Q1"],
+    "alphabet": ["0", "1"],
+    "turingSymbols": [],
+    "initialState": "Q0",
+    "finalStates": ["Q1"],
+    "transitions": [
+      {
+        "readSymbol": "1",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1",
+        "writtenSymbol": "◇"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q1",
+        "movementDirection": "LEFT",
+        "nextState": "Q1",
+        "writtenSymbol": "◇"
+      }
+
+    ]
+  },
+
+  {
+    "id": "1",
+    "name": "Mustererkennung 010",
+    "description": "Diese Turingmaschine sucht auf dem Band nach dem Muster \"010'\" und schreibt danach ein \"E\" während der Kopf auf der letzten \"0\" des gefundenen Musters stehen bleibt.",
+    "states": ["Q0", "Q1", "Q2", "Q3", "Q4"],
+    "alphabet": ["0", "1", "E"],
+    "turingSymbols": [ "E" ],
+    "initialState": "Q0",
+    "finalStates": ["Q4"],
+    "transitions": [
+      {
+        "readSymbol": "0",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0",
+        "writtenSymbol": "1"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4",
+        "writtenSymbol": "◇"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2",
+        "writtenSymbol": "1"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4",
+        "writtenSymbol": "◇"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q2",
+        "movementDirection": "RIGHT",
+        "nextState": "Q3",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q2",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0",
+        "writtenSymbol": "1"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q2",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4",
+        "writtenSymbol": "◇"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q3",
+        "movementDirection": "LEFT",
+        "nextState": "Q4",
+        "writtenSymbol": "E"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q3",
+        "movementDirection": "LEFT",
+        "nextState": "Q4",
+        "writtenSymbol": "E"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q3",
+        "movementDirection": "LEFT",
+        "nextState": "Q4",
+        "writtenSymbol": "E"
+      }
+    ]
+  } ,
+
+  {
+    "id": "2",
+    "name": "Drei-Null-Erkennung und Markierung",
+    "description": "Diese Turingmaschine sucht nach drei aufeinanderfolgenden Nullen, schreibt anschließend ein \"E\" rechts davon und lässt den Kopf auf der zuletzt gefundenen Null stehen.",
+    "states": ["Q0", "Q1", "Q2", "Q3", "Q4"],
+    "alphabet": ["0", "1", "E"],
+    "turingSymbols": [ "E" ],
+    "initialState": "Q0",
+    "finalStates": ["Q4"],
+    "transitions": [
+      {
+        "readSymbol": "0",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0",
+        "writtenSymbol": "1"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4",
+        "writtenSymbol": "◇"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0",
+        "writtenSymbol": "1"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4",
+        "writtenSymbol": "◇"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q2",
+        "movementDirection": "RIGHT",
+        "nextState": "Q3",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q2",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0",
+        "writtenSymbol": "1"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q2",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4",
+        "writtenSymbol": "◇"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q3",
+        "movementDirection": "LEFT",
+        "nextState": "Q4",
+        "writtenSymbol": "E"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q3",
+        "movementDirection": "LEFT",
+        "nextState": "Q4",
+        "writtenSymbol": "E"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q3",
+        "movementDirection": "LEFT",
+        "nextState": "Q4",
+        "writtenSymbol": "E"
+      }
+    ]
+  } ,
+  {
+    "id": "3",
+    "name": "Die Anzahl der Nullen auf dem Band",
+    "description": " Diese Turingmaschine zählt die Anzahl der Nullen auf dem Band und schreibt \"G\" für eine gerade oder \"U\" für eine ungerade Anzahl auf das erste Leerzeichen, wobei der Kopf rechts vom Ergebnis stehen bleibt.",
+    "states": [
+      "Q0",
+      "Q1",
+      "Q2"
+    ],
+    "alphabet": [
+      "0",
+      "1",
+      "E",
+      "G",
+      "U"
+    ],
+    "turingSymbols": [
+      "G",
+      "U"
+    ],
+    "initialState": "Q0",
+    "finalStates": [
+      "Q2"
+    ],
+    "transitions": [
+      {
+        "readSymbol": "0",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0",
+        "writtenSymbol": "1"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2",
+        "writtenSymbol": "G"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0",
+        "writtenSymbol": "0"
+      },
+      {
+        "readSymbol": "1",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1",
+        "writtenSymbol": "1"
+      },
+      {
+        "readSymbol": "◇",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2",
+        "writtenSymbol": "U"
+      }
+    ]
+  },
+
+  {
+    "id": "4",
+    "name": "Multiplikation durch wiederholte Addition",
+    "description": "Multipliziert zwei Zahlen, indem wiederholt Additionen durchgeführt werden.",
+    "states": ["Q0", "Q1", "Q2", "Q3", "Q4", "Qs"],
+    "alphabet": ["0", "B"],
+    "turingSymbols": ["B"],
+    "initialState": "Q0",
+    "finalStates": ["Qs"],
+    "transitions": [
+      {
+        "readSymbol": "0",
+        "currentState": "Q0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1",
+        "writtenSymbol": "B"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2",
+        "writtenSymbol": "B"
+      },
+      {
+        "readSymbol": "B",
+        "currentState": "Q2",
+        "movementDirection": "LEFT",
+        "nextState": "Q3",
+        "writtenSymbol": "B"
+      },
+      {
+        "readSymbol": "0",
+        "currentState": "Q3",
+        "movementDirection": "LEFT",
+        "nextState": "Q0",
+        "writtenSymbol": "0"
+      }
+    ]
+  },
+
+  {
+    "id": "5",
+    "name": "Prüfer für gleiche Anzahl von a's und b's",
+    "description": "Diese Turing-Maschine prüft, ob eine gegebene Zeichenkette die gleiche Anzahl von 'a's und 'b's enthält.",
+    "states": ["Q0", "Q1", "Q2", "Q3", "Q4"],
+    "alphabet": ["a", "b", "B", "x"],
+    "turingSymbols": ["a", "b", "B", "x"],
+    "initialState": "Q0",
+    "finalStates": ["Q4"],
+    "transitions": [
+      {
+        "currentState": "Q0",
+        "readSymbol": "x",
+        "writtenSymbol": "x",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0"
+      },
+      {
+        "currentState": "Q0",
+        "readSymbol": "a",
+        "writtenSymbol": "x",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1"
+      },
+      {
+        "currentState": "Q0",
+        "readSymbol": "b",
+        "writtenSymbol": "x",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2"
+      },
+      {
+        "currentState": "Q0",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "LEFT",
+        "nextState": "Q4"
+      },
+      {
+        "currentState": "Q1",
+        "readSymbol": "a",
+        "writtenSymbol": "a",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1"
+      },
+      {
+        "currentState": "Q1",
+        "readSymbol": "x",
+        "writtenSymbol": "x",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1"
+      },
+      {
+        "currentState": "Q1",
+        "readSymbol": "b",
+        "writtenSymbol": "x",
+        "movementDirection": "LEFT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q2",
+        "readSymbol": "b",
+        "writtenSymbol": "b",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2"
+      },
+      {
+        "currentState": "Q2",
+        "readSymbol": "x",
+        "writtenSymbol": "x",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2"
+      },
+      {
+        "currentState": "Q2",
+        "readSymbol": "a",
+        "writtenSymbol": "x",
+        "movementDirection": "LEFT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "a",
+        "writtenSymbol": "a",
+        "movementDirection": "LEFT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "b",
+        "writtenSymbol": "b",
+        "movementDirection": "LEFT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "x",
+        "writtenSymbol": "x",
+        "movementDirection": "LEFT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0"
+      }
+      ]
+  },
+
+  {
+    "id": "6",
+    "name": "Palindrom-Prüfer",
+    "description": "Diese Turing-Maschine prüft, ob eine gegebene Zeichenkette ein Palindrom über dem Alphabet {a, b} ist.",
+    "states": ["Q0", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8"],
+    "alphabet": ["a", "b", "B"],
+    "turingSymbols": ["a", "b", "B"],
+    "initialState": "Q0",
+    "finalStates": ["Q8"],
+    "transitions": [
+      {
+        "currentState": "Q0",
+        "readSymbol": "a",
+        "writtenSymbol": "B",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1"
+      },
+      {
+        "currentState": "Q0",
+        "readSymbol": "b",
+        "writtenSymbol": "B",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2"
+      },
+      {
+        "currentState": "Q0",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "BLEIBEN",
+        "nextState": "Q8"
+      },
+      {
+        "currentState": "Q1",
+        "readSymbol": "a",
+        "writtenSymbol": "a",
+        "movementDirection": "RIGHT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q1",
+        "readSymbol": "b",
+        "writtenSymbol": "b",
+        "movementDirection": "RIGHT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q1",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "RIGHT",
+        "nextState": "Q8"
+      },
+      {
+        "currentState": "Q2",
+        "readSymbol": "a",
+        "writtenSymbol": "a",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4"
+      },
+      {
+        "currentState": "Q2",
+        "readSymbol": "b",
+        "writtenSymbol": "b",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4"
+      },
+      {
+        "currentState": "Q2",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "RIGHT",
+        "nextState": "Q8"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "a",
+        "writtenSymbol": "a",
+        "movementDirection": "RIGHT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "b",
+        "writtenSymbol": "b",
+        "movementDirection": "RIGHT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "LEFT",
+        "nextState": "Q5"
+      },
+      {
+        "currentState": "Q4",
+        "readSymbol": "a",
+        "writtenSymbol": "a",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4"
+      },
+      {
+        "currentState": "Q4",
+        "readSymbol": "b",
+        "writtenSymbol": "b",
+        "movementDirection": "RIGHT",
+        "nextState": "Q4"
+      },
+      {
+        "currentState": "Q4",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "LEFT",
+        "nextState": "Q6"
+      },
+      {
+        "currentState": "Q5",
+        "readSymbol": "a",
+        "writtenSymbol": "B",
+        "movementDirection": "LEFT",
+        "nextState": "Q7"
+      },
+      {
+        "currentState": "Q6",
+        "readSymbol": "b",
+        "writtenSymbol": "B",
+        "movementDirection": "LEFT",
+        "nextState": "Q7"
+      },
+      {
+        "currentState": "Q7",
+        "readSymbol": "a",
+        "writtenSymbol": "a",
+        "movementDirection": "LEFT",
+        "nextState": "Q7"
+      },
+      {
+        "currentState": "Q7",
+        "readSymbol": "b",
+        "writtenSymbol": "b",
+        "movementDirection": "LEFT",
+        "nextState": "Q7"
+      },
+      {
+        "currentState": "Q7",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0"
+      }
+    ]
+  }
+
+]

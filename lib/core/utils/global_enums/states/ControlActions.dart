@@ -1,0 +1,1 @@
+enum ControlAction { play, stop, next, back }
