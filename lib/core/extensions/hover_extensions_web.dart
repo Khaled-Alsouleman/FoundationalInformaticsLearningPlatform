@@ -1,7 +1,7 @@
 import 'dart:html' as html;
 import 'package:foundational_learning_platform/core/utils/index.dart';
 
-extension HoverExtensions on Widget {
+extension HoverExtensionsWeb on Widget {
   static final appContainer = html.window.document.getElementById('app-container');
 
 

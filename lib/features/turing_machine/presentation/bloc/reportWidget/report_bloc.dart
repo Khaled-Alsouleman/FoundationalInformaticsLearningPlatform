@@ -5,27 +5,42 @@ part 'report_state.dart';
 
 class ReportBloc extends Bloc<ReportEvent, ReportState> {
   ReportBloc() : super(ReportInitial()) {
-    on<AddTransitionEvent>((event, emit) {
+
+    on<InitializeReport>((event,emit){
+      emit(ReportLoaded(transitions:  [], currentStep: 0));
+    });
+   on<RemoveTransition> ((event, emit){
       if (state is ReportLoaded) {
         final currentState = state as ReportLoaded;
-        final newTransitions = List<TMTransitionFunction>.from(currentState.transitions)
-          ..add(event.transition);
-        emit(ReportLoaded(transitions: newTransitions, currentStep: currentState.currentStep));
-      } else {
-        emit(ReportLoaded(transitions: [event.transition], currentStep: 0));
+        final newTransitions = List.of(currentState.transitions);
+        newTransitions.removeLast();
+        final newValue = currentState.currentStep - 1;
+        emit(currentState.copyWith(transitions: newTransitions, currentStep: newValue > 0 ? newValue : 0));
+
+      }
+   });
+    on<AddTransition>((event, emit) {
+      if (state is ReportLoaded) {
+        final currentState = state as ReportLoaded;
+        final newTransitions = List.of(currentState.transitions);
+        newTransitions.add(event.transition);
+        final newValue = currentState.currentStep + 1;
+        emit(currentState.copyWith(transitions: newTransitions, currentStep: newValue));
       }
     });
 
-    on<ScrollToStepEvent>((event, emit) {
-      if (state is ReportLoaded) {
+
+    on<ScrollToStep>((event, emit) {
         final currentState = state as ReportLoaded;
         emit(ReportLoaded(transitions: currentState.transitions, currentStep: event.step));
-      }
+
     });
 
-
-    on<ResetReportEvent>((event, emit) {
-      emit(ReportLoaded(transitions: const [], currentStep: 0));
+    on<ResetReport>((event, emit) {
+      if (state is ReportLoaded) {
+        final currentState = state as ReportLoaded;
+        emit(currentState.copyWith(transitions: const [] , currentStep: 0));
+      }
     });
 
   }

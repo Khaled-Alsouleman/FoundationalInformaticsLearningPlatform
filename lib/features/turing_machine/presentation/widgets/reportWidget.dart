@@ -1,7 +1,9 @@
 import 'package:foundational_learning_platform/core/utils/index.dart';
 
 class ReportWidget extends StatelessWidget {
-  const ReportWidget({Key? key}) : super(key: key);
+  final ScrollController _scrollController = ScrollController();
+
+   ReportWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +13,17 @@ class ReportWidget extends StatelessWidget {
 
     return BlocBuilder<ReportBloc, ReportState>(
       builder: (context, state) {
-        if (state is ReportLoaded) {
-          print("state.currentStep");
-          print(state.currentStep);
+        if (state is ReportLoaded ) {
+          int currentStep = state.currentStep;
+
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _scrollController.animateTo(
+              currentStep * 80.0,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          });
+
           return Container(
             width: screenWidth * 0.7,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -45,47 +55,59 @@ class ReportWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    controller: ScrollController(),
+                    controller: _scrollController,
                     itemCount: state.transitions.length,
                     itemBuilder: (context, index) {
                       final transition = state.transitions[index];
-                      final isHighlighted = state.currentStep == index;
 
-                      // Nur die Card hervorheben, deren Index dem currentStep entspricht
+                      if (kDebugMode) {
+                        print('Current step: $currentStep');
+                        print('Index: $index');
+                      }
+
+                      final isHighlighted = currentStep - 1 == index;
+
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 4.0),
                         elevation: 4,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        color: getColorState(context, isHighlighted), // Hervorhebung nur, wenn currentStep == index
+                        color: getColorState(context, isHighlighted),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _buildDataCell(context, "${index + 1}", isHighlighted),
-                              _buildDataCell(context, transition.currentState, isHighlighted),
-                              _buildDataCell(context, transition.readSymbol, isHighlighted),
-                              _buildDataCell(context, transition.writtenSymbol, isHighlighted),
-                              _buildDataCell(context, transition.nextState, isHighlighted),
-                              _buildDataCell(context, transition.movementDirection.name, isHighlighted),
+                              _buildDataCell(
+                                  context, "${index + 1}", isHighlighted),
+                              _buildDataCell(context, transition.currentState,
+                                  isHighlighted),
+                              _buildDataCell(context, transition.readSymbol,
+                                  isHighlighted),
+                              _buildDataCell(context, transition.writtenSymbol,
+                                  isHighlighted),
+                              _buildDataCell(
+                                  context, transition.nextState, isHighlighted),
+                              _buildDataCell(
+                                  context, transition.movementDirection.name,
+                                  isHighlighted),
                             ],
                           ),
                         ),
                       );
                     },
-
                   ),
                 ),
+
               ],
             ),
           );
         } else {
           return LottieBuilder.asset(
             'animation/typing.json',
-            height: MediaQuery.of(context).size.height /6,
-            width: MediaQuery.of(context).size.width /5,
+            height: MediaQuery.of(context).size.height / 6,
+            width: MediaQuery.of(context).size.width / 5,
             fit: BoxFit.fill,
           );
         }
@@ -101,7 +123,8 @@ class ReportWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDataCell( BuildContext context  ,String value, bool isHighlighted) {
+  Widget _buildDataCell(
+      BuildContext context, String value, bool isHighlighted) {
     final colorsTheme = Theme.of(context).extension<AppColorsTheme>();
     final textTheme = Theme.of(context).textTheme;
     return Expanded(
@@ -109,7 +132,8 @@ class ReportWidget extends StatelessWidget {
         child: Text(
           value,
           style: textTheme.labelLarge!.copyWith(
-            color: !isHighlighted ? colorsTheme!.primaryColor : colorsTheme!.white ,
+            color:
+            !isHighlighted ? colorsTheme!.primaryColor : colorsTheme!.white,
           ),
         ),
       ),
@@ -124,23 +148,27 @@ class ReportWidget extends StatelessWidget {
       if (tmState.executionState == ApprovalState.rejected) {
         currentColor = colorsTheme.errorHeight;
         if (kDebugMode) {
-          print('getColorState: Execution state is rejected, using error color.');
+          print(
+              'getColorState: Execution state is rejected, using error color.');
         }
       } else if (tmState.executionState == ApprovalState.accepted) {
         currentColor = colorsTheme.green;
         if (kDebugMode) {
-          print('getColorState: Execution state is accepted, using green color.');
+          print(
+              'getColorState: Execution state is accepted, using green color.');
         }
       } else {
-
-        if(isHighlighted){ currentColor = colorsTheme.primaryColor;}
+        if (isHighlighted) {
+          currentColor = colorsTheme.primaryColor;
+        }
         if (kDebugMode) {
           print('getColorState: Execution state loaded, using default color.');
         }
       }
     } else {
       if (kDebugMode) {
-        print('getColorState: State is not TuringMachineLoaded, using default color.');
+        print(
+            'getColorState: State is not TuringMachineLoaded, using default color.');
       }
     }
     if (kDebugMode) {
@@ -148,5 +176,5 @@ class ReportWidget extends StatelessWidget {
     }
     return currentColor;
   }
-
 }
+

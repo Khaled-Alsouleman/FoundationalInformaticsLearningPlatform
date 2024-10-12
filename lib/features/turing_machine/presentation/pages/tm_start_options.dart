@@ -10,6 +10,8 @@ class TMStartOptionPage extends StatefulWidget {
 
 class _TMStartOptionPageState extends State<TMStartOptionPage> {
   final ScrollController _scrollController = ScrollController();
+
+
   @override
   void dispose() {
     _scrollController.dispose();

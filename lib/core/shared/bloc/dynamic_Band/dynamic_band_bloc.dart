@@ -10,9 +10,9 @@ class DynamicBandBloc extends Bloc<DynamicBandEvent, DynamicBandState> {
     on<UpdateInput>(_onUpdateInput);
     on<ControlEvent>(_onControlEvent);
     on<UpdateTransitionState>(_onUpdateTransitionState);
+    on<UpdateAutoPlay>(_onUpdateAutoPlay);
     on<ResetBand>(_onResetBand);
   }
-
 
   void _onControlEvent(ControlEvent event, Emitter<DynamicBandState> emit) {
     final currentState = state as DynamicBandLoaded;
@@ -61,18 +61,35 @@ class DynamicBandBloc extends Bloc<DynamicBandEvent, DynamicBandState> {
 
       case ControlAction.next:
         if (event.transitionFunction != null) {
+
           var lastTransition = currentState.lastTransition?.clone() ?? MyStack();
+
           lastTransition.push(event.transitionFunction!);
 
           add(UpdateTransitionState(
-              movementDirection: event.transitionFunction!.movementDirection,
-              newTapeSymbol: event.transitionFunction!.writtenSymbol,
-              newState: event.transitionFunction!.nextState
+            movementDirection: event.transitionFunction!.movementDirection,
+            newTapeSymbol: event.transitionFunction!.writtenSymbol,
+            newState: event.transitionFunction!.nextState,
           ));
+
+          if (kDebugMode) {
+            print('Next action triggered with transition: ${event.transitionFunction}');
+            print('Current head location: ${currentState.headLocation}');
+            print('Movement direction: ${event.transitionFunction!.movementDirection}');
+            print('Written symbol: ${event.transitionFunction!.writtenSymbol}');
+            print('New state: ${event.transitionFunction!.nextState}');
+          }
+
           emit(currentState.copyWith(
             executionState: currentState.autoPlay ? ExecutionState.running : ExecutionState.paused,
             lastTransition: lastTransition,
           ));
+
+
+          if (kDebugMode) {
+            print('State updated. Execution state: ${currentState.executionState}');
+            print('AutoPlay: ${currentState.autoPlay}');
+          }
         }
         break;
 
@@ -87,18 +104,18 @@ class DynamicBandBloc extends Bloc<DynamicBandEvent, DynamicBandState> {
           }
 
 
-          final reverseDirection = lastTransition.movementDirection == MovementDirection.right
-              ? MovementDirection.left
-              : lastTransition.movementDirection == MovementDirection.left
-              ? MovementDirection.right
-              : MovementDirection.stay;
+          final reverseDirection = lastTransition!.movementDirection == MovementDirection.rechts
+              ? MovementDirection.links
+              : lastTransition.movementDirection == MovementDirection.links
+              ? MovementDirection.rechts
+              : MovementDirection.bleiben;
 
           final int maxIndex = currentState.tape.length - 1;
           const int minIndex = 0;
 
 
-          final newPosition = reverseDirection == MovementDirection.right ? 1
-              : reverseDirection == MovementDirection.left ? -1
+          final newPosition = reverseDirection == MovementDirection.rechts ? 1
+              : reverseDirection == MovementDirection.links ? -1
               : 0;
 
           int newHeadLocation = currentState.headLocation + newPosition;
@@ -110,7 +127,7 @@ class DynamicBandBloc extends Bloc<DynamicBandEvent, DynamicBandState> {
 
 
           final updatedTape = Map<int, String>.from(currentState.tape);
-          updatedTape[newHeadLocation] = lastTransition.readSymbol; // Setze das alte Symbol
+          updatedTape[newHeadLocation] = lastTransition.readSymbol;
 
 
           emit(currentState.copyWith(
@@ -121,8 +138,14 @@ class DynamicBandBloc extends Bloc<DynamicBandEvent, DynamicBandState> {
             autoPlay: false,
             lastTransition: lastTransitions,
           ));
+
         }
         break;
+
+
+
+
+
 
     }
   }
@@ -193,14 +216,19 @@ class DynamicBandBloc extends Bloc<DynamicBandEvent, DynamicBandState> {
       newHeadLocation = currentState.headLocation;
     }
 
-
     emit(currentState.copyWith(
       headLocation: newHeadLocation,
       tape: updatedTape,
       currentState: event.newState,
       executionState: currentState.autoPlay ? ExecutionState.running : ExecutionState.paused,
     ));
+
+    if (kDebugMode) {
+      print('Band aktualisiert. Head position: $newHeadLocation, tape: $updatedTape');
+    }
   }
+
+
 
   void _onResetBand(ResetBand event, Emitter<DynamicBandState> emit) {
     final currentState = state as DynamicBandLoaded;
@@ -221,4 +249,16 @@ class DynamicBandBloc extends Bloc<DynamicBandEvent, DynamicBandState> {
       lastTransition: null,
     ));
   }
+
+
+
+  void _onUpdateAutoPlay(UpdateAutoPlay event, Emitter<DynamicBandState> emit) {
+    final currentState = state as DynamicBandLoaded;
+
+    emit(currentState.copyWith(
+      autoPlay: event.isAutoPlay,
+      executionState: event.isAutoPlay ? ExecutionState.running : ExecutionState.paused,
+    ));
+  }
+
 }

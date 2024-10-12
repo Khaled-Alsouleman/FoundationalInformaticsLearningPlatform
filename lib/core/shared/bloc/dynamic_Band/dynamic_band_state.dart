@@ -15,7 +15,7 @@ class DynamicBandLoaded extends DynamicBandState {
   final String originalInput;
   final bool autoPlay;
   final int autoSpeed;
-  final MyStack? lastTransition;
+  final MyStack<TMTransitionFunction>? lastTransition;
 
   DynamicBandLoaded({
     required this.isInitBand,
@@ -39,7 +39,7 @@ class DynamicBandLoaded extends DynamicBandState {
     final String? originalInput,
     final bool? autoPlay,
     final int? autoSpeed,
-    final MyStack? lastTransition,
+    final MyStack<TMTransitionFunction>? lastTransition,
   }) {
     if (kDebugMode) {
       print('lastTransition from DynamicBandState has been updated:');

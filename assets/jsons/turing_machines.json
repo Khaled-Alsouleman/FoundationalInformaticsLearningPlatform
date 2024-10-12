@@ -21,7 +21,7 @@
         "currentState": "Q0",
         "movementDirection": "RIGHT",
         "nextState": "Q0",
-        "writtenSymbol": "0"
+        "writtenSymbol": "1"
       },
       {
         "readSymbol": "◇",
@@ -69,7 +69,7 @@
         "readSymbol": "◇",
         "currentState": "Q0",
         "movementDirection": "RIGHT",
-        "nextState": "Q4",
+        "nextState": "Q0",
         "writtenSymbol": "◇"
       },
       {
@@ -90,7 +90,7 @@
         "readSymbol": "◇",
         "currentState": "Q1",
         "movementDirection": "RIGHT",
-        "nextState": "Q4",
+        "nextState": "Q1",
         "writtenSymbol": "◇"
       },
       {
@@ -111,27 +111,27 @@
         "readSymbol": "◇",
         "currentState": "Q2",
         "movementDirection": "RIGHT",
-        "nextState": "Q4",
+        "nextState": "Q2",
         "writtenSymbol": "◇"
       },
       {
         "readSymbol": "0",
         "currentState": "Q3",
-        "movementDirection": "LEFT",
+        "movementDirection": "LINKS",
         "nextState": "Q4",
         "writtenSymbol": "E"
       },
       {
         "readSymbol": "1",
         "currentState": "Q3",
-        "movementDirection": "LEFT",
+        "movementDirection": "LINKS",
         "nextState": "Q4",
         "writtenSymbol": "E"
       },
       {
         "readSymbol": "◇",
         "currentState": "Q3",
-        "movementDirection": "LEFT",
+        "movementDirection": "LINKS",
         "nextState": "Q4",
         "writtenSymbol": "E"
       }
@@ -166,7 +166,7 @@
         "readSymbol": "◇",
         "currentState": "Q0",
         "movementDirection": "RIGHT",
-        "nextState": "Q4",
+        "nextState": "Q0",
         "writtenSymbol": "◇"
       },
       {
@@ -187,7 +187,7 @@
         "readSymbol": "◇",
         "currentState": "Q1",
         "movementDirection": "RIGHT",
-        "nextState": "Q4",
+        "nextState": "Q1",
         "writtenSymbol": "◇"
       },
       {
@@ -208,7 +208,7 @@
         "readSymbol": "◇",
         "currentState": "Q2",
         "movementDirection": "RIGHT",
-        "nextState": "Q4",
+        "nextState": "Q2",
         "writtenSymbol": "◇"
       },
       {

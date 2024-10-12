@@ -10,4 +10,16 @@ final class ReportLoaded extends ReportState {
   final int currentStep;
 
   ReportLoaded({required this.transitions, required this.currentStep});
+
+
+  ReportLoaded copyWith({
+    List<TMTransitionFunction>? transitions,
+    int? currentStep,
+  }) {
+    return ReportLoaded(
+      transitions: transitions ?? this.transitions,
+      currentStep: currentStep ?? this.currentStep,
+    );
+  }
 }
+

@@ -3,16 +3,26 @@ part of 'report_bloc.dart';
 @immutable
 sealed class ReportEvent {}
 
-final class AddTransitionEvent extends ReportEvent {
+final class InitializeReport extends ReportEvent {}
+
+final class RemoveTransition extends ReportEvent {}
+
+final class AddTransition extends ReportEvent {
   final TMTransitionFunction transition;
 
-  AddTransitionEvent(this.transition);
+  AddTransition(this.transition);
 }
 
-final class ScrollToStepEvent extends ReportEvent {
+final class ScrollToStep extends ReportEvent {
   final int step;
 
-  ScrollToStepEvent(this.step);
+  ScrollToStep(this.step);
 }
 
-final class ResetReportEvent extends ReportEvent {}
+final class ResetReport extends ReportEvent {}
+
+final class UpdateCurrentStep extends ReportEvent {
+  final int currentStep;
+  UpdateCurrentStep({required this.currentStep});
+
+}

@@ -4,12 +4,14 @@ class CustomButton extends StatelessWidget {
   final Widget child;
   final VoidCallback onPressed;
   final BorderRadius? borderRadius;
+  final bool? isActive;
 
   const CustomButton({
     Key? key,
     required this.child,
     required this.onPressed,
     this.borderRadius,
+    this.isActive = true,
   }) : super(key: key);
 
   @override
@@ -30,9 +32,9 @@ class CustomButton extends StatelessWidget {
               : colorsTheme.primaryColor;
 
           return ElevatedButton(
-            onPressed: onPressed,
+            onPressed: isActive! ? onPressed : (){},
             style: ElevatedButton.styleFrom(
-              backgroundColor: backgroundColor,
+              backgroundColor: isActive! ? backgroundColor : colorsTheme.primaryColor.withOpacity(0.3),
               minimumSize: const Size(200, 50),
               shape: RoundedRectangleBorder(
                 borderRadius: borderRadius ?? AppDimensions.borderRadiusAll,
@@ -45,7 +47,7 @@ class CustomButton extends StatelessWidget {
               ),
             ),
             child: DefaultTextStyle.merge(
-              style: textTheme.labelLarge!.copyWith(color: textColor),
+              style: textTheme.labelMedium!.copyWith(color: textColor),
               child: child,
             ),
           ).onHoverEvent(context);

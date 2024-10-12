@@ -1,6 +1,6 @@
 import 'package:foundational_learning_platform/core/utils/index.dart';
 
-class MyTextField extends StatelessWidget {
+class MyTextField extends StatefulWidget {
   final GlobalKey globalKey;
   final Text label;
   final String? hintText;
@@ -23,6 +23,13 @@ class MyTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _MyTextFieldState createState() => _MyTextFieldState();
+}
+
+class _MyTextFieldState extends State<MyTextField> {
+  String? errorText;
+
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorTheme = Theme.of(context).extension<AppColorsTheme>();
@@ -40,27 +47,28 @@ class MyTextField extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Form(
-            key: globalKey,
+            key: widget.globalKey,
             child: SizedBox(
               height: 50,
               child: TextFormField(
-                controller: controller,
-                decoration: decoration?.copyWith(
-                  label: label,
-                  hintText:  hintText ?? '',
+                controller: widget.controller,
+                decoration: widget.decoration?.copyWith(
+                  label: widget.label,
+                  hintText: widget.hintText ?? '',
                   hintStyle: textTheme.labelSmall,
                   contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
                   border: border,
                   enabledBorder: border,
                   focusedBorder: border,
-                  errorStyle:  textTheme.bodySmall?.copyWith(
+                  errorText: errorText,
+                  errorStyle: textTheme.bodySmall?.copyWith(
                     fontSize: 10,
                     color: colorTheme.errorHeight,
                   ),
                 ) ??
                     InputDecoration(
-                      label: label,
-                      hintText: hintText ?? 'Die Eingabe soll durch Komma getrennt eingeben',
+                      label: widget.label,
+                      hintText: widget.hintText ?? 'Die Eingabe soll durch Komma getrennt eingeben',
                       hintStyle: textTheme.labelSmall,
                       contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
                       fillColor: colorTheme.transparent,
@@ -69,19 +77,29 @@ class MyTextField extends StatelessWidget {
                       border: border,
                       enabledBorder: border,
                       focusedBorder: border,
-                      errorText: null,
-                      errorStyle:  textTheme.bodySmall?.copyWith(
+                      errorText: errorText,
+                      errorStyle: textTheme.bodySmall?.copyWith(
                         fontSize: 10,
                         color: colorTheme.errorHeight,
                       ),
                     ),
                 onChanged: (value) {
-                  if (onChanged != null) {
-                    onChanged!(value);
-                  }
+                  setState(() {
+                    if (widget.onChanged != null) {
+                      widget.onChanged!(value);
+                    }
+                    if (widget.validator != null) {
+                      final validationError = widget.validator!(value);
+                      if (validationError == null) {
+                        errorText = null;
+                      } else {
+                        errorText = validationError;
+                      }
+                    }
+                  });
                 },
-                onFieldSubmitted: onSubmitted ?? (value) {},
-                validator: validator,
+                onFieldSubmitted: widget.onSubmitted ?? (value) {},
+                validator: widget.validator,
                 style: textTheme.bodySmall?.copyWith(color: colorTheme.primaryColor),
               ),
             ),

@@ -1,13 +1,22 @@
-import 'package:flutter/material.dart';
+import 'package:foundational_learning_platform/core/utils/index.dart';
 
 class ResponsiveLayout extends StatelessWidget {
  final Widget mobileBody;
- final Widget DesktopBody;
+ final Widget desktopBody;
 
- ResponsiveLayout({required this.mobileBody , required this.DesktopBody});
+ const ResponsiveLayout({super.key, required this.mobileBody, required this.desktopBody});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+ @override
+ Widget build(BuildContext context) {
+  final screenWidth = MediaQuery.of(context).size.width;
+
+ if (kDebugMode) {
+   print("Screen width: $screenWidth");
+ }
+  if (screenWidth < 600) {
+   return mobileBody;
+  } else {
+   return desktopBody;
   }
+ }
 }

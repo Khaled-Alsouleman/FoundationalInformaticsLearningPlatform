@@ -14,7 +14,6 @@ class _TMConfigurationState extends State<TMConfiguration> {
   final GlobalKey<FormState> statesKey = GlobalKey<FormState>();
   final GlobalKey<FormState> alphabetKey = GlobalKey<FormState>();
 
-
   int currentNumberOfStep = 0;
 
   @override
@@ -27,6 +26,87 @@ class _TMConfigurationState extends State<TMConfiguration> {
 
   @override
   Widget build(BuildContext context) {
+    return ResponsiveLayout(
+      mobileBody: _buildMobileLayout(context),
+      desktopBody: _buildDesktopLayout(context),
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context) {
+    final colorsTheme = Theme.of(context).extension<AppColorsTheme>();
+
+    return Material(
+      color: colorsTheme!.backgroundColor,
+      child: BlocBuilder<TuringMachineBloc, TuringMachineState>(
+        builder: (context, tmConfigurationState) {
+          if (tmConfigurationState is TuringMachineLoaded || tmConfigurationState is TuringMachineCreated) {
+            return BlocListener<StepProgressBloc, StepProgressState>(
+              listener: (context, stepperState) {
+                if (stepperState is StepperLoaded) {
+                  setState(() {
+                    currentNumberOfStep = stepperState.currentStep;
+                  });
+
+                  if (stepperState.stepperState == StepperState.complete) {
+                    if (tmConfigurationState is TuringMachineCreated) {
+                      context.read<ContentBloc>().add(
+                        UpdateContent(
+                          context: context,
+                          newContent: ExecutionPage(
+                            tm: tmConfigurationState.turingMachine,
+                            input: '',
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                }
+              },
+              child: Column(
+                crossAxisAlignment: currentNumberOfStep != 0
+                    ? CrossAxisAlignment.center
+                    : CrossAxisAlignment.start,
+                mainAxisAlignment: currentNumberOfStep != 0
+                    ? MainAxisAlignment.center
+                    : MainAxisAlignment.start,
+                children: [
+                  currentNumberOfStep != 0
+                      ? const SizedBox(height: 7)
+                      : Padding(
+                    padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+                    child: CustomBackButton(
+                      onPressed: () {
+                        context.read<ContentBloc>().add(
+                          UpdateContent(
+                            context: context,
+                            newContent: const TMStartOptionPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _buildStepperWidget(context),
+
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+
+  Widget _buildDesktopLayout(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final colorsTheme = Theme.of(context).extension<AppColorsTheme>();
 
@@ -42,14 +122,8 @@ class _TMConfigurationState extends State<TMConfiguration> {
                     currentNumberOfStep = stepperState.currentStep;
                   });
 
-
-                  print('currentNumberOfStep');
-                  print(currentNumberOfStep);
-
                   if (stepperState.stepperState == StepperState.complete) {
                     if (tmConfigurationState is TuringMachineCreated) {
-                      print('tmConfigurationState.turingMachine');
-                      print(tmConfigurationState.turingMachine);
                       context.read<ContentBloc>().add(
                         UpdateContent(
                           context: context,
@@ -64,13 +138,13 @@ class _TMConfigurationState extends State<TMConfiguration> {
                 }
               },
               child: Column(
-                crossAxisAlignment:  currentNumberOfStep != 0 ?  CrossAxisAlignment.center : CrossAxisAlignment.start ,
-                mainAxisAlignment:   currentNumberOfStep != 0 ?  MainAxisAlignment.center  :  MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   currentNumberOfStep != 0
-                      ? const SizedBox(height: 7,)
+                      ? const SizedBox(height: 7)
                       : Padding(
-                    padding: const EdgeInsets.all(AppDimensions.paddingMedium,),
+                    padding: const EdgeInsets.all(AppDimensions.paddingMedium),
                     child: CustomBackButton(
                       onPressed: () {
                         context.read<ContentBloc>().add(
@@ -82,24 +156,13 @@ class _TMConfigurationState extends State<TMConfiguration> {
                       },
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Align(
-                        child: RoundedShadowContainer(
-                          height: screenSize.height / 1.3,
-                          width: screenSize.width / 1.5,
-                          child: BuildStepperWidget(
-                            statesController: statesController,
-                            alphabetController: alphabetController,
-                            turingSymbolController: turingSymbolController,
-                            statesKey: statesKey,
-                            alphabetKey: alphabetKey,
-                          ), // _buildStepper(context, tmConfigurationState),
-                        ),
-                      ),
-                    ],
+                  // Desktop spezifisches Layout
+                  Align(
+                    child: RoundedShadowContainer(
+                      height: screenSize.height / 1.3,
+                      width: screenSize.width / 1.5,
+                      child: _buildStepperWidget(context),
+                    ),
                   ),
                 ],
               ),
@@ -108,6 +171,16 @@ class _TMConfigurationState extends State<TMConfiguration> {
           return const Center(child: CircularProgressIndicator());
         },
       ),
+    );
+  }
+
+  Widget _buildStepperWidget(BuildContext context) {
+    return BuildStepperWidget(
+      statesController: statesController,
+      alphabetController: alphabetController,
+      turingSymbolController: turingSymbolController,
+      statesKey: statesKey,
+      alphabetKey: alphabetKey,
     );
   }
 }

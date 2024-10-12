@@ -58,3 +58,10 @@ class UpdateTransitionState extends DynamicBandEvent {
     required this.newState,
   });
 }
+
+class UpdateAutoPlay extends DynamicBandEvent{
+  final bool isAutoPlay;
+  UpdateAutoPlay({required this.isAutoPlay});
+}
+
+

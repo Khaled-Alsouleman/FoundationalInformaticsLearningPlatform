@@ -6,7 +6,7 @@ enum MovementDirection {
   left,
   stay;
 
-  // Methode, um den enum Namen als String zu bekommen
+
   String get displayName {
     return toString().split('.').last;
   }

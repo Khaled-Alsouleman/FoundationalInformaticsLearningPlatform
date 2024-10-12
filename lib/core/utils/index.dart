@@ -45,7 +45,6 @@ export 'package:foundational_learning_platform/core/shared/widgets/custom_typeWr
 export 'package:foundational_learning_platform/core/shared/pages/Home.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/pages/TM.dart';
 export 'package:foundational_learning_platform/core/shared/bloc/content/content_bloc.dart';
-export 'package:foundational_learning_platform/core/extensions/hover_extensions.dart';
 export 'package:foundational_learning_platform/core/shared/bloc/sidebar/sidebar_event.dart';
 export 'package:flutter_gradients_reborn/flutter_gradients_reborn.dart';
 export 'package:foundational_learning_platform/core/shared/widgets/translate_on_hover.dart';
@@ -75,7 +74,6 @@ export 'package:foundational_learning_platform/features/turing_machine/data/repo
 export 'package:foundational_learning_platform/features/turing_machine/presentation/bloc/turingMachine_Bloc/turing_machine_bloc.dart';
 export 'package:foundational_learning_platform/core/utils/global_enums/states/ApprovalState.dart';
 export 'package:foundational_learning_platform/features/turing_machine/domain/usescases/ExecuteTransitionUseCase.dart';
-export 'package:foundational_learning_platform/features/turing_machine/domain/usescases/ControlExecutionUseCase.dart';
 export 'package:foundational_learning_platform/features/turing_machine/domain/usescases/InitializeTuringMachineUseCase.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/dialog/showResultDialog.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/reportWidget.dart';
@@ -99,3 +97,16 @@ export 'package:foundational_learning_platform/features/turing_machine/domain/us
 export 'package:foundational_learning_platform/features/turing_machine/domain/usescases/UpdateTransitionRuleUseCase.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/pages/simulator/execution_page.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/pages/simulator/turing_configuration.dart';
+export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/BuildSpeedControls.dart';
+export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/custom_table_widget.dart';
+export 'package:printing/printing.dart';
+export 'package:flutter/services.dart' show rootBundle;
+export 'package:pdf/pdf.dart';
+export 'package:foundational_learning_platform/core/extensions/hover_extensions_web.dart'
+if (dart.library.html) 'package:foundational_learning_platform/core/extensions/hover_extensions_web.dart'
+if (dart.library.io) 'package:foundational_learning_platform/core/extensions/hover_extensions_mobile.dart';
+export 'package:foundational_learning_platform/core/config/responsive_Layout.dart';
+export 'package:flutter/services.dart';
+export 'dart:io' show Platform;
+export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/buildInputField.dart';
+export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/BuildInputSection.dart';

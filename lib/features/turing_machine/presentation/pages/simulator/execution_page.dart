@@ -1,6 +1,5 @@
-import 'package:foundational_learning_platform/core/utils/index.dart';
-import 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/BuildSpeedControls.dart';
 
+import 'package:foundational_learning_platform/core/utils/index.dart';
 
 class ExecutionPage extends StatefulWidget {
   final TuringMachine tm;
@@ -13,17 +12,21 @@ class ExecutionPage extends StatefulWidget {
 }
 
 class _ExecutionPageState extends State<ExecutionPage> {
-  Timer? _timer;
+
   final GlobalKey<FormState> key = GlobalKey<FormState>();
   final TextEditingController controller = TextEditingController();
   List<TMTransitionFunction> executedTransitions = [];
   int currentStep = -1;
   bool isAutoPlay = false;
   int expandedPanel = 0;
+  bool _dialogShown = false;
 
   late final InitializeTuringMachineUseCase initializeTuringMachineUseCase;
   late final ExecuteTransitionUseCase executeTransitionUseCase;
-  late final ControlExecutionUseCase controlExecutionUseCase;
+  late final TuringMachineBloc tmBloc;
+  late final DynamicBandBloc bandBloc;
+  late final ReportBloc reportBloc;
+  late final ContentBloc contentBloc;
 
   @override
   void initState() {
@@ -32,65 +35,20 @@ class _ExecutionPageState extends State<ExecutionPage> {
       turingMachineBloc: context.read<TuringMachineBloc>(),
     );
 
-    executeTransitionUseCase = ExecuteTransitionUseCase(
-      turingMachineBloc: context.read<TuringMachineBloc>(),
-      dynamicBandBloc: context.read<DynamicBandBloc>(),
-    );
-
-    controlExecutionUseCase = ControlExecutionUseCase();
-
-
-    _initializeTuringMachine();
-  }
-
-  @override
-  void dispose() {
-    controlExecutionUseCase.stopTimer();
-    super.dispose();
-  }
-
-  void _initializeTuringMachine() {
     initializeTuringMachineUseCase.call(widget.input, widget.tm);
-  }
 
+    //Initialize Blocs
+    tmBloc = context.read<TuringMachineBloc>();
+    bandBloc = context.read<DynamicBandBloc>();
+    reportBloc = context.read<ReportBloc>();
+    contentBloc = context.read<ContentBloc>();
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<TuringMachineBloc, TuringMachineState>(
-      builder: (context, state) {
-        if (state is TuringMachineLoaded) {
-          if (state.executionState == ApprovalState.rejected) {
-
-          }
-          if (state.executionState == ApprovalState.accepted) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) {
-                showResultDialog(context: context, isAccepted: true);
-              }
-            });
-          }
-        }
-        return BlocBuilder<DynamicBandBloc, DynamicBandState>(
-          builder: (context, bandState) {
-            if (bandState is DynamicBandInitial) {
-              _initializeBand(context);
-            } else if (bandState is DynamicBandLoaded) {
-              if (kDebugMode) {
-                print('Band last transition : ');
-                print(bandState.lastTransition);
-              }
-              _handleAutoPlay(bandState);
-              return _buildLoadedUI(context, bandState);
-            }
-            return const CircularProgressIndicator();
-          },
-        );
-      },
+    executeTransitionUseCase = ExecuteTransitionUseCase(
+        turingMachineBloc: tmBloc,
+        dynamicBandBloc: bandBloc,
+        reportBloc: reportBloc
     );
-  }
 
-
-  void _initializeBand(BuildContext context) {
     context.read<DynamicBandBloc>().add(
       InitializeBand(
         headLocation: 1,
@@ -98,28 +56,41 @@ class _ExecutionPageState extends State<ExecutionPage> {
         currentState: widget.tm.initialState,
       ),
     );
+
+
   }
 
-  void _handleAutoPlay(DynamicBandLoaded bandState) {
-    if (bandState.executionState == ExecutionState.paused) {
-      controlExecutionUseCase.stopTimer();
-    } else if (bandState.executionState == ExecutionState.running && bandState.autoPlay) {
-      _startTimer(context, bandState.autoSpeed);
-    }
+  @override
+  void dispose() {
+    executeTransitionUseCase.stopTimer();
+    super.dispose();
   }
 
-  void _startTimer(BuildContext context, int delay) {
-    controlExecutionUseCase.startTimer(context, delay, context.read<TuringMachineBloc>(), widget.tm);
-  }
-
-  void _stopTimer() {
-    controlExecutionUseCase.stopTimer();
-  }
-
-  void _executeTransition(BuildContext context, TMTransitionFunction? transition, {bool back = false, bool isAutoPlay = false}) {
-    if (transition != null) {
-      executeTransitionUseCase.call(transition, back: back);
-    }
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TuringMachineBloc, TuringMachineState>(
+      builder: (context, state) {
+        if(reportBloc.state is ReportInitial){
+          reportBloc.add(InitializeReport());
+        }
+        if (state is TuringMachineLoaded) {
+        if(state.executionState == ApprovalState.accepted){
+          _showResultDialog(isAccepted: true);
+        }else if(state.executionState == ApprovalState.rejected){
+          _showResultDialog(isAccepted: false);
+        }
+        }
+        return BlocBuilder<DynamicBandBloc, DynamicBandState>(
+          builder: (context, bandState) {
+          if (bandState is DynamicBandLoaded) {
+              //_handleAutoPlay(bandState);
+              return _buildLoadedUI(context, bandState);
+            }
+            return const CircularProgressIndicator();
+          },
+        );
+      },
+    );
   }
 
   Widget _buildLoadedUI(BuildContext context, DynamicBandLoaded bandState) {
@@ -133,9 +104,12 @@ class _ExecutionPageState extends State<ExecutionPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(AppDimensions.paddingMedium),
-            child: _buildDynamicBand(),
+            child: DynamicBand(
+              startState: widget.tm.initialState,
+              numberOfBlankSymbol: 25,
+            ),
           ),
-          const Expanded(
+          Expanded(
             child: ReportWidget(),
           ),
           const SizedBox(height: AppDimensions.paddingLarge),
@@ -189,10 +163,22 @@ class _ExecutionPageState extends State<ExecutionPage> {
     );
   }
 
-  Widget _buildDynamicBand() {
-    return DynamicBand(
-      startState: widget.tm.initialState,
-      numberOfBlankSymbol: 25,
+  Widget _buildInputSection(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        BuildInputField(
+          formKey: key,
+          controller: controller,
+          label: '',
+          hintText: '',
+          validator: (value) => TuringMachineUtils.validateInput(value, widget.tm.alphabet),
+          onChanged: (value) {},
+        ),
+
+        _buildLoadButton(context),
+      ],
     );
   }
 
@@ -203,21 +189,30 @@ class _ExecutionPageState extends State<ExecutionPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _buildControlButton('Reset', () => _resetBand(context, bandState)),
-          _buildControlButton('Back', () => _goBack(context, bandState)),
-          _buildControlButton('Next', () => _goNext(context, bandState)),
-          _buildControlButton(bandState.executionState == ExecutionState.running ? 'Stop' : 'Play',
-                  () => _togglePlayPause(context, bandState)),
+          _buildControlButton('Neuer TM?', () => _newTM()),
+          _buildControlButton('Zurücksetzen', () => _resetBand()),
+          _buildControlButton('Zurück', () => _goBack(context, bandState)),
+          _buildControlButton('Nächst', () => _goNext(context, bandState)),
+          _buildControlButton(bandState.executionState == ExecutionState.running ? 'Anhalten' : 'Auto',
+                  () => _toggleAutoPlay(bandState)),
         ],
       ),
     );
+  }
+
+  void _handleAutoPlay(DynamicBandLoaded bandState) {
+    if (bandState.executionState == ExecutionState.paused) {
+      executeTransitionUseCase.stopTimer();
+    } else if (bandState.executionState == ExecutionState.running && bandState.autoPlay) {
+      executeTransitionUseCase.startTimer();
+    }
   }
 
   Widget _buildControlButton(String label, VoidCallback onPressed) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SizedBox(
-        width: 100,
+        width: 130,
         child: CustomButton(
           onPressed: onPressed,
           child: Text(label),
@@ -226,108 +221,58 @@ class _ExecutionPageState extends State<ExecutionPage> {
     );
   }
 
-  void _resetBand(BuildContext context, DynamicBandLoaded bandState) {
-    if (!bandState.isInitBand) {
-      setState(() {
-        currentStep = -1;
-      });
-      context.read<ReportBloc>().add(ResetReportEvent());
-      context.read<DynamicBandBloc>().add(ResetBand(initialState: widget.tm.initialState));
+  void _newTM(){
+    reportBloc.add(ResetReport());
+    bandBloc.add(ResetBand(initialState: widget.tm.initialState));
+    tmBloc.add(ResetEvent());
+    tmBloc.add(LoadLocalTMs(context: context));
+    contentBloc.add(UpdateContent(context: context, newContent: const  TMStartOptionPage()));
+  }
+  void _resetBand() {
+    final bandState = bandBloc.state;
+    if (bandState is DynamicBandLoaded && !bandState.isInitBand) {
+      reportBloc.add(ResetReport());
+      bandBloc.add(ResetBand(initialState: widget.tm.initialState));
+      tmBloc.add(UpdateTMState(executionState: ApprovalState.indexed));
+     setState(() {
+       _dialogShown = false;
+     });
     }
   }
 
   void _goBack(BuildContext context, DynamicBandLoaded bandState) {
-    final lastTrans = bandState.lastTransition?.peek();
-    if (!bandState.isInitBand && lastTrans != null) {
-      context.read<ReportBloc>().add(ScrollToStepEvent(currentStep));
-      _executeTransition(context, lastTrans, back: true);
+
+    if (!bandState.isInitBand) {
+      executeTransitionUseCase.call(back: true);
     }
   }
 
   void _goNext(BuildContext context, DynamicBandLoaded bandState) {
-    final currentTransition = TuringMachineUtils.getNextTransition(bandState, widget.tm.transitions);
-
-    if (currentTransition == null) {
-      context.read<TuringMachineBloc>().add(UpdateTMState(executionState: ApprovalState.rejected));
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          showResultDialog(context: context, isAccepted: false);
-        }
-      });
-    } else {
-      setState(() {
-        currentStep += 1;
-      });
-      context.read<ReportBloc>().add(AddTransitionEvent(currentTransition));
-      context.read<ReportBloc>().add(ScrollToStepEvent(currentStep));
-      _executeTransition(context, currentTransition, isAutoPlay: false);
+    final tmState = tmBloc.state;
+    if (tmState is TuringMachineLoaded &&
+        tmState.executionState != ApprovalState.accepted &&
+        tmState.executionState != ApprovalState.rejected) {
+      executeTransitionUseCase.call(back: false);
     }
   }
 
+  void _toggleAutoPlay(DynamicBandLoaded bandState) {
+    final tmState = tmBloc.state;
+    if(tmState is TuringMachineLoaded && tmState.executionState == ApprovalState.indexed){
+      if (bandState.executionState == ExecutionState.running) {
 
-  void _togglePlayPause(BuildContext context, DynamicBandLoaded bandState) {
-    final currentTransition = TuringMachineUtils.getNextTransition(bandState, widget.tm.transitions);
-
-    if (currentTransition == null  ) {
-      context.read<TuringMachineBloc>().add(UpdateTMState(executionState: ApprovalState.rejected));
-      context.read<DynamicBandBloc>().add(ControlEvent(action: ControlAction.stop));
-      _stopTimer();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          showResultDialog(context: context, isAccepted: false);
-        }
-      });
-
-    } else {
-      if (bandState.executionState == ExecutionState.paused) {
-        setState(() {
-          isAutoPlay = true;
-        });
-        _executePlay(context, bandState);
+        executeTransitionUseCase.stopTimer();
+        bandBloc.add(UpdateAutoPlay(isAutoPlay: false));
+        bandBloc.add(ControlEvent(action: ControlAction.stop, transitionFunction: null));
       } else {
-        setState(() {
-          isAutoPlay = false;
-        });
 
-        context.read<DynamicBandBloc>().add(ControlEvent(action: ControlAction.stop));
-        _stopTimer();
+        executeTransitionUseCase.startTimer();
+        bandBloc.add(UpdateAutoPlay(isAutoPlay: true));
       }
     }
 
-
   }
 
-  void _executePlay(BuildContext context, DynamicBandLoaded bandState) {
-    final nextTransition = TuringMachineUtils.getNextTransition(bandState, widget.tm.transitions);
-
-    if (nextTransition != null) {
-      _startTimer(context, bandState.autoSpeed);
-      context.read<DynamicBandBloc>().add(ControlEvent(action: ControlAction.play, transitionFunction: nextTransition));
-    }
-  }
-
-  Widget _buildInputSection(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildInputField(),
-        _buildLoadButton(context),
-      ],
-    );
-  }
-
-  Widget _buildInputField() {
-    return SizedBox(
-      width: 300,
-      child: MyTextField(
-        globalKey: key,
-        controller: controller,
-        label: const Text(''),
-        validator: (value) => TuringMachineUtils.validateInput(value, widget.tm.alphabet),
-      ),
-    );
-  }
 
   Widget _buildLoadButton(BuildContext context) {
     return SizedBox(
@@ -335,9 +280,13 @@ class _ExecutionPageState extends State<ExecutionPage> {
       height: 50,
       child: CustomButton(
         onPressed: () {
-          if (key.currentState?.validate() == true) {
-            _loadInput(context);
-          }
+          context.read<DynamicBandBloc>().add(
+            UpdateInput(
+                numberOfBlankSymbol: 20,
+                newInput: controller.text,
+                startState: widget.tm.initialState),
+          );
+          _resetBand();
         },
         borderRadius: AppDimensions.borderRadiusRight,
         child: const Text('Laden'),
@@ -345,11 +294,16 @@ class _ExecutionPageState extends State<ExecutionPage> {
     );
   }
 
-  void _loadInput(BuildContext context) {
-    final value = controller.text;
-    context.read<DynamicBandBloc>().add(
-      UpdateInput(numberOfBlankSymbol: 20, newInput: value, startState: widget.tm.initialState),
-    );
+  void _showResultDialog({required bool isAccepted}) {
+    if (!_dialogShown) {
+      // Schedule the dialog to show after the current build process is completed
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          _dialogShown = true;
+        });
+        showResultDialog(context: context, isAccepted: isAccepted);
+      });
+    }
   }
 
 
