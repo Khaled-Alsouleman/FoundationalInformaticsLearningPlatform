@@ -1,11 +1,21 @@
-export 'package:typewrite_text/typewrite_text.dart';
-export 'package:meta/meta.dart';
-export 'package:lottie/lottie.dart';
-export 'package:flutter_svg/flutter_svg.dart';
-export 'package:flutter_bloc/flutter_bloc.dart';
-export 'package:flutter_animate/flutter_animate.dart';
+// Plattformübergreifende Importe
 export 'package:flutter/material.dart';
 export 'package:flutter/foundation.dart';
+export 'package:flutter_bloc/flutter_bloc.dart';
+export 'package:pdf/pdf.dart';
+export 'package:printing/printing.dart';
+export 'dart:typed_data';
+
+
+export 'package:foundational_learning_platform/core/extensions/hover_extensions_web.dart'
+if (dart.library.html) 'package:foundational_learning_platform/core/extensions/hover_extensions_web.dart';
+
+
+export 'dart:io' if (dart.library.io) 'dart:io';
+
+export 'package:path_provider/path_provider.dart' if (dart.library.io) '';
+
+
 export 'package:foundational_learning_platform/features/turing_machine/utils/turinmachine_utils.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/pages/tm_start_options.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/details_dialog.dart';
@@ -40,7 +50,7 @@ export 'dart:async';
 export 'package:bloc/bloc.dart';
 export 'package:foundational_learning_platform/core/shared/card/widgets/MyCard.dart';
 export 'package:foundational_learning_platform/core/shared/widgets/homeContentWidget.dart';
-export  'package:foundational_learning_platform/core/shared/sideBar/sideBar_widget.dart';
+export 'package:foundational_learning_platform/core/shared/sideBar/sideBar_widget.dart';
 export 'package:foundational_learning_platform/core/shared/widgets/custom_typeWriter_widget.dart';
 export 'package:foundational_learning_platform/core/shared/pages/Home.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/pages/TM.dart';
@@ -56,13 +66,12 @@ export 'package:foundational_learning_platform/core/config/theme/AppIcons.dart';
 export 'package:foundational_learning_platform/core/config/theme/appTextStyles.dart';
 export 'package:foundational_learning_platform/core/config/theme/appGradientsTheme.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/buildStateSelectionwidget.dart';
-export  'package:foundational_learning_platform/core/config/theme/buttons/custom_elevatedButton.dart';
+export 'package:foundational_learning_platform/core/config/theme/buttons/custom_elevatedButton.dart';
 export 'package:foundational_learning_platform/core/utils/global_enums/states/ControlActions.dart';
 export 'package:foundational_learning_platform/core/shared/widgets/custom_singleExpansionPanel_widget.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/bloc/reportWidget/report_bloc.dart';
 export 'package:foundational_learning_platform/core/error/noDataPage.dart';
 export 'package:equatable/equatable.dart';
-export 'package:foundational_learning_platform/core/utils/global_enums/states/ControlActions.dart';
 export 'package:foundational_learning_platform/features/turing_machine/domain/entities/local_tm_list.dart';
 export 'package:foundational_learning_platform/core/error/turing_machine_load_exception.dart';
 export 'package:foundational_learning_platform/core/error/turing_machine_notFound_exception.dart';
@@ -99,14 +108,18 @@ export 'package:foundational_learning_platform/features/turing_machine/presentat
 export 'package:foundational_learning_platform/features/turing_machine/presentation/pages/simulator/turing_configuration.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/BuildSpeedControls.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/custom_table_widget.dart';
-export 'package:printing/printing.dart';
 export 'package:flutter/services.dart' show rootBundle;
-export 'package:pdf/pdf.dart';
-export 'package:foundational_learning_platform/core/extensions/hover_extensions_web.dart'
-if (dart.library.html) 'package:foundational_learning_platform/core/extensions/hover_extensions_web.dart'
-if (dart.library.io) 'package:foundational_learning_platform/core/extensions/hover_extensions_mobile.dart';
+export 'package:flutter_animate/flutter_animate.dart';
+export 'package:flutter_svg/svg.dart';
 export 'package:foundational_learning_platform/core/config/responsive_Layout.dart';
+export 'package:lottie/lottie.dart';
 export 'package:flutter/services.dart';
-export 'dart:io' show Platform;
+export 'package:typewrite_text/typewrite_text.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/buildInputField.dart';
-export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/BuildInputSection.dart';
+
+
+
+
+
+
+

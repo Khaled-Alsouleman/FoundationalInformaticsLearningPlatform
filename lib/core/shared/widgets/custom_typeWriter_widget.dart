@@ -1,5 +1,6 @@
 import 'package:foundational_learning_platform/core/utils/index.dart';
 
+
 class MyTypeWriter extends StatelessWidget {
   final String input;
   final TextStyle? textStyle;

@@ -1,4 +1,3 @@
-
 import 'package:foundational_learning_platform/core/utils/index.dart';
 
 class ExecutionPage extends StatefulWidget {
@@ -83,7 +82,6 @@ class _ExecutionPageState extends State<ExecutionPage> {
         return BlocBuilder<DynamicBandBloc, DynamicBandState>(
           builder: (context, bandState) {
           if (bandState is DynamicBandLoaded) {
-              //_handleAutoPlay(bandState);
               return _buildLoadedUI(context, bandState);
             }
             return const CircularProgressIndicator();

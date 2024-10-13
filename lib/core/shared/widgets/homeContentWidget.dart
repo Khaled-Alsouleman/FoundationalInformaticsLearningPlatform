@@ -1,5 +1,6 @@
 import 'package:foundational_learning_platform/core/utils/index.dart';
 
+
 class HomeContentWidget extends StatelessWidget {
   const HomeContentWidget({super.key});
 
