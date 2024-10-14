@@ -1,5 +1,6 @@
-import 'package:pdf/widgets.dart' as pw;
+
 import 'package:foundational_learning_platform/core/utils/index.dart';
+import '../../domain/usescases/generateTuringMachinePDF.dart';
 
 void showResultDialog({
   required BuildContext context,
@@ -127,7 +128,7 @@ void showResultDialog({
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             CustomButton(
-                              isActive: false,
+                              isActive: true,
                               onPressed: () {
                                 _generatePDF(context, isAccepted);
                               },
@@ -156,65 +157,83 @@ void showResultDialog({
   );
 }
 
+
+
+
 Future<void> _generatePDF(BuildContext context, bool isAccepted) async {
-  final pdf = pw.Document();
+  final PdfService pdfService = PdfServiceFactory.createPdfService();
+  final generator = GenerateTuringMachinePDF(pdfService);
 
-  final font = await rootBundle.load("fonts/NotoSans-Regular.ttf");
-  final ttf = pw.Font.ttf(font);
+  final bandState = context.read<DynamicBandBloc>().state as DynamicBandLoaded;
+  final tmState = context.read<TuringMachineBloc>().state as TuringMachineLoaded;
 
-  pdf.addPage(
-    pw.Page(
-      build: (pw.Context context) {
-        return pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Text(
-              isAccepted
-                  ? 'Ergebnis: \n Die Turing-Maschine hat die Zeichenkette akzeptiert.'
-                  : 'Ergebnis: \n Die Turing-Maschine hat die Zeichenkette nicht akzeptiert.',
-              style: pw.TextStyle(font: ttf, fontSize: 14, fontWeight: pw.FontWeight.bold, color: isAccepted ? PdfColor.fromHex('#00b300')  : PdfColor.fromHex('#b30000') ),
-            ),
-            pw.SizedBox(height: 10),
+  final Map<String, dynamic> machineDetails = {
+    'Name': tmState.turingMachine.name ?? "Keine Name vorhanden",
+    'Beschreibung': tmState.turingMachine.description ?? "Keine Beschreibung vorhanden",
+    'Startzustand': tmState.turingMachine.initialState,
+    'Endzustände': '{${tmState.turingMachine.finalStates.join(', ')}}',
+    'Zustände': '{${tmState.turingMachine.states.join(', ')}}',
+    'Bandalphabet': '{${tmState.turingMachine.alphabet.join(', ')}}',
+    'Blanket symbol': AppContents.blanketSymbol,
+  };
 
 
-            pw.Text('Turing-Maschinen Details:', style: pw.TextStyle(font: ttf, fontSize: 14)),
-            pw.Text('Name: ${"Turing Machine Name"}', style: pw.TextStyle(font: ttf,fontSize: 12)),
-            pw.Text('Beschreibung: ${"Turing Machine Description"}', style: pw.TextStyle(font: ttf,fontSize: 12)),
-            pw.Text('Startzustand: ${"Q0"}', style: pw.TextStyle(font: ttf)),
-            pw.Text('Endzustände: ${"Q4"}', style: pw.TextStyle(font: ttf)),
-            pw.SizedBox(height: 10),
+  final List<Map<String, String>> transitions = tmState.turingMachine.transitions.map((t) => {
+    'currentState': t.currentState,
+    'readSymbol': t.readSymbol,
+    'nextState': t.nextState,
+    'writtenSymbol': t.writtenSymbol,
+    'movement': t.movementDirection.name,
+  }).toList();
 
-            pw.Text('Ausgeführte Schritte:', style: pw.TextStyle(font: ttf)),
-            pw.Divider(),
-            pw.SizedBox(height: 10),
 
-            // Adding steps data
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Text('Schritt', style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold)),
-                pw.Text('Zustand', style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold)),
-                pw.Text('Lesen', style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold)),
-                pw.Text('Schreiben', style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold)),
-                pw.Text('Bewegung', style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold)),
-              ],
-            ),
+  final steps = (context.read<ReportBloc>().state as ReportLoaded)
+      .transitions
+      .asMap()
+      .entries
+      .map((entry) {
+    final index = entry.key;
+    final step = entry.value;
 
-           pw.SizedBox(height: 12),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
 
-              ],
-            ),
-          ],
-        );
-      },
-    ),
+    return {
+      'stepNumber': index + 1,
+      'currentState': step.currentState,
+      'readSymbol': step.readSymbol,
+      'writtenSymbol': step.writtenSymbol,
+      'nextState': step.nextState,
+      'movementDirection': step.movementDirection.name,
+    };
+  }).toList();
+
+
+
+  final List<String> bandAlphabet = tmState.turingMachine.alphabet;
+  final List<String> states = tmState.turingMachine.states;
+  final List<TMTransitionFunction> tmTransitions = tmState.turingMachine.transitions;
+
+  final Uint8List pdfData = await generator.call(
+    isAccepted: isAccepted,
+    inputString: bandState.originalInput,
+    machineDetails: machineDetails,
+    transitions: transitions,
+    steps: steps,
+    bandSymbol: bandAlphabet,
+    states: states,
+    tmTransitions: tmTransitions
   );
 
 
+  if (kIsWeb) {
+    await pdfService.printPDF(pdfData);
+  } else {
+    await pdfService.savePDF(pdfData, "Ergebnis.pdf");
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('PDF wurde heruntergeladen')),
+    );
+  }
 }
+
 
 Widget _buildExecutedStepsList(BuildContext context, bool isAccepted) {
   final colorTheme = Theme.of(context).extension<AppColorsTheme>();

@@ -234,6 +234,7 @@
       }
     ]
   } ,
+
   {
     "id": "3",
     "name": "Die Anzahl der Nullen auf dem Band",
@@ -246,7 +247,6 @@
     "alphabet": [
       "0",
       "1",
-      "E",
       "G",
       "U"
     ],
@@ -349,19 +349,12 @@
     "id": "5",
     "name": "Prüfer für gleiche Anzahl von a's und b's",
     "description": "Diese Turing-Maschine prüft, ob eine gegebene Zeichenkette die gleiche Anzahl von 'a's und 'b's enthält.",
-    "states": ["Q0", "Q1", "Q2", "Q3", "Q4"],
-    "alphabet": ["a", "b", "B", "x"],
-    "turingSymbols": ["a", "b", "B", "x"],
+    "states": ["Q0", "Q1", "Q2", "Q3", "Q4", "Qr"],
+    "alphabet": ["a", "b", "B", "x", "◇"],
+    "turingSymbols": ["a", "b", "B", "x", "◇"],
     "initialState": "Q0",
     "finalStates": ["Q4"],
     "transitions": [
-      {
-        "currentState": "Q0",
-        "readSymbol": "x",
-        "writtenSymbol": "x",
-        "movementDirection": "RIGHT",
-        "nextState": "Q0"
-      },
       {
         "currentState": "Q0",
         "readSymbol": "a",
@@ -375,6 +368,13 @@
         "writtenSymbol": "x",
         "movementDirection": "RIGHT",
         "nextState": "Q2"
+      },
+      {
+        "currentState": "Q0",
+        "readSymbol": "x",
+        "writtenSymbol": "x",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0"
       },
       {
         "currentState": "Q0",
@@ -392,6 +392,13 @@
       },
       {
         "currentState": "Q1",
+        "readSymbol": "b",
+        "writtenSymbol": "x",
+        "movementDirection": "LEFT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q1",
         "readSymbol": "x",
         "writtenSymbol": "x",
         "movementDirection": "RIGHT",
@@ -399,10 +406,10 @@
       },
       {
         "currentState": "Q1",
-        "readSymbol": "b",
-        "writtenSymbol": "x",
-        "movementDirection": "LEFT",
-        "nextState": "Q3"
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "Qr",
+        "nextState": "Qr"
       },
       {
         "currentState": "Q2",
@@ -413,6 +420,13 @@
       },
       {
         "currentState": "Q2",
+        "readSymbol": "a",
+        "writtenSymbol": "x",
+        "movementDirection": "LEFT",
+        "nextState": "Q3"
+      },
+      {
+        "currentState": "Q2",
         "readSymbol": "x",
         "writtenSymbol": "x",
         "movementDirection": "RIGHT",
@@ -420,10 +434,10 @@
       },
       {
         "currentState": "Q2",
-        "readSymbol": "a",
-        "writtenSymbol": "x",
-        "movementDirection": "LEFT",
-        "nextState": "Q3"
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "Qr",
+        "nextState": "Qr"
       },
       {
         "currentState": "Q3",
@@ -448,12 +462,26 @@
       },
       {
         "currentState": "Q3",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
+        "readSymbol": "◇",
+        "writtenSymbol": "◇",
         "movementDirection": "RIGHT",
         "nextState": "Q0"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "Qr",
+        "nextState": "Qr"
+      },
+      {
+        "currentState": "Q4",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "LEFT",
+        "nextState": "Q4"
       }
-      ]
+    ]
   },
 
   {
