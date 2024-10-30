@@ -118,6 +118,8 @@ export 'package:typewrite_text/typewrite_text.dart';
 export 'package:foundational_learning_platform/features/turing_machine/presentation/widgets/buildInputField.dart';
 export 'package:foundational_learning_platform/core/utils/abstract/PdfService.dart';
 export 'package:foundational_learning_platform/features/turing_machine/data/services/pdf_factory_service.dart';
+export 'package:foundational_learning_platform/core/utils/abstract/AutomatonAbstract.dart';
+export 'package:foundational_learning_platform/features/dfa/domain/entities/dfaTransitionFunction.dart';
 
 
 

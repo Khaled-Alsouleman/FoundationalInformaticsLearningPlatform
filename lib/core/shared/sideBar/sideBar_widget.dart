@@ -1,5 +1,7 @@
 import 'package:foundational_learning_platform/core/utils/index.dart';
 
+import '../../../features/dfa/presentation/widges/AutomatonPainterWidget.dart';
+
 class SideBarWidget extends StatelessWidget {
   final double? parentHeight;
 
@@ -60,6 +62,14 @@ class SideBarWidget extends StatelessWidget {
                                 context: context,
                                 title: "Turing-Machine",
                                 content: const TMPage()
+                            ),
+                            _buildItems(
+                                context: context,
+                                title: "Endliche Automaten",
+                                content: CustomPaint(
+                                  size: Size(300, 300), // Beispielgröße für die Zeichenfläche
+                                  painter: AutomatonPainter(), // Verwende deinen CustomPainter hier
+                                ),
                             ),
                           ],
                         ),

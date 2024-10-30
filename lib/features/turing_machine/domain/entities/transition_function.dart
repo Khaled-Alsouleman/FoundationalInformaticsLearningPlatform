@@ -5,17 +5,17 @@ class TMTransitionFunction extends TransitionFunctionAbstract {
     required String currentState,
     required String readSymbol,
     required String nextState,
-    required MovementDirection movementDirection,
+    required this.movementDirection,
     required this.writtenSymbol,
 
   }) : super(
     currentState: currentState,
     readSymbol: readSymbol,
     nextState: nextState,
-    movementDirection :movementDirection
   );
 
   final String writtenSymbol;
+  final MovementDirection movementDirection;
 
   TMTransitionFunction copyWith({
     String? currentState,

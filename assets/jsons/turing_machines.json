@@ -405,13 +405,6 @@
         "nextState": "Q1"
       },
       {
-        "currentState": "Q1",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
-        "movementDirection": "Qr",
-        "nextState": "Qr"
-      },
-      {
         "currentState": "Q2",
         "readSymbol": "b",
         "writtenSymbol": "b",
@@ -431,13 +424,6 @@
         "writtenSymbol": "x",
         "movementDirection": "RIGHT",
         "nextState": "Q2"
-      },
-      {
-        "currentState": "Q2",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
-        "movementDirection": "Qr",
-        "nextState": "Qr"
       },
       {
         "currentState": "Q3",
@@ -465,14 +451,7 @@
         "readSymbol": "◇",
         "writtenSymbol": "◇",
         "movementDirection": "RIGHT",
-        "nextState": "Q0"
-      },
-      {
-        "currentState": "Q3",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
-        "movementDirection": "Qr",
-        "nextState": "Qr"
+        "nextState": "Q4"
       },
       {
         "currentState": "Q4",
@@ -480,161 +459,249 @@
         "writtenSymbol": "B",
         "movementDirection": "LEFT",
         "nextState": "Q4"
+      },
+      {
+        "currentState": "Qr",
+        "readSymbol": "B",
+        "writtenSymbol": "B",
+        "movementDirection": "RIGHT",
+        "nextState": "Qr"
       }
     ]
   },
 
+
   {
     "id": "6",
-    "name": "Palindrom-Prüfer",
-    "description": "Diese Turing-Maschine prüft, ob eine gegebene Zeichenkette ein Palindrom über dem Alphabet {a, b} ist.",
-    "states": ["Q0", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8"],
-    "alphabet": ["a", "b", "B"],
-    "turingSymbols": ["a", "b", "B"],
+    "name": "Binary palindrome",
+    "description": "Diese Turing-Maschine akzeptiert eine binäre Zahl, wenn sie ein Palindrom ist.",
+    "states": ["Q0", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "QA", "QR"],
+    "alphabet": ["0", "1", "_", "◇"],
+    "turingSymbols": ["0", "1", "_", "◇"],
     "initialState": "Q0",
-    "finalStates": ["Q8"],
+    "finalStates": ["QA"],
     "transitions": [
       {
         "currentState": "Q0",
-        "readSymbol": "a",
-        "writtenSymbol": "B",
+        "readSymbol": "0",
+        "writtenSymbol": "_",
         "movementDirection": "RIGHT",
         "nextState": "Q1"
       },
       {
         "currentState": "Q0",
-        "readSymbol": "b",
-        "writtenSymbol": "B",
+        "readSymbol": "1",
+        "writtenSymbol": "_",
         "movementDirection": "RIGHT",
         "nextState": "Q2"
       },
       {
-        "currentState": "Q0",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
-        "movementDirection": "BLEIBEN",
-        "nextState": "Q8"
+        "currentState": "Q1",
+        "readSymbol": "0",
+        "writtenSymbol": "0",
+        "movementDirection": "RIGHT",
+        "nextState": "Q1"
       },
       {
         "currentState": "Q1",
-        "readSymbol": "a",
-        "writtenSymbol": "a",
+        "readSymbol": "1",
+        "writtenSymbol": "1",
         "movementDirection": "RIGHT",
+        "nextState": "Q1"
+      },
+      {
+        "currentState": "Q1",
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "LEFT",
         "nextState": "Q3"
-      },
-      {
-        "currentState": "Q1",
-        "readSymbol": "b",
-        "writtenSymbol": "b",
-        "movementDirection": "RIGHT",
-        "nextState": "Q3"
-      },
-      {
-        "currentState": "Q1",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
-        "movementDirection": "RIGHT",
-        "nextState": "Q8"
       },
       {
         "currentState": "Q2",
-        "readSymbol": "a",
-        "writtenSymbol": "a",
+        "readSymbol": "0",
+        "writtenSymbol": "0",
         "movementDirection": "RIGHT",
+        "nextState": "Q2"
+      },
+      {
+        "currentState": "Q2",
+        "readSymbol": "1",
+        "writtenSymbol": "1",
+        "movementDirection": "RIGHT",
+        "nextState": "Q2"
+      },
+      {
+        "currentState": "Q2",
+        "readSymbol": "◇",
+        "writtenSymbol": "◇",
+        "movementDirection": "LEFT",
+        "nextState": "Q2"
+      },
+      {
+        "currentState": "Q2",
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "LEFT",
         "nextState": "Q4"
       },
       {
-        "currentState": "Q2",
-        "readSymbol": "b",
-        "writtenSymbol": "b",
-        "movementDirection": "RIGHT",
-        "nextState": "Q4"
-      },
-      {
-        "currentState": "Q2",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
-        "movementDirection": "RIGHT",
-        "nextState": "Q8"
-      },
-      {
         "currentState": "Q3",
-        "readSymbol": "a",
-        "writtenSymbol": "a",
-        "movementDirection": "RIGHT",
-        "nextState": "Q3"
-      },
-      {
-        "currentState": "Q3",
-        "readSymbol": "b",
-        "writtenSymbol": "b",
-        "movementDirection": "RIGHT",
-        "nextState": "Q3"
-      },
-      {
-        "currentState": "Q3",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
+        "readSymbol": "0",
+        "writtenSymbol": "_",
         "movementDirection": "LEFT",
         "nextState": "Q5"
       },
       {
         "currentState": "Q4",
-        "readSymbol": "a",
-        "writtenSymbol": "a",
-        "movementDirection": "RIGHT",
-        "nextState": "Q4"
+        "readSymbol": "1",
+        "writtenSymbol": "_",
+        "movementDirection": "LEFT",
+        "nextState": "Q5"
       },
       {
-        "currentState": "Q4",
-        "readSymbol": "b",
-        "writtenSymbol": "b",
-        "movementDirection": "RIGHT",
-        "nextState": "Q4"
-      },
-      {
-        "currentState": "Q4",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
+        "currentState": "Q5",
+        "readSymbol": "0",
+        "writtenSymbol": "0",
         "movementDirection": "LEFT",
         "nextState": "Q6"
       },
       {
         "currentState": "Q5",
-        "readSymbol": "a",
-        "writtenSymbol": "B",
+        "readSymbol": "1",
+        "writtenSymbol": "1",
         "movementDirection": "LEFT",
         "nextState": "Q7"
       },
       {
         "currentState": "Q6",
-        "readSymbol": "b",
-        "writtenSymbol": "B",
+        "readSymbol": "0",
+        "writtenSymbol": "0",
+        "movementDirection": "LEFT",
+        "nextState": "Q6"
+      },
+      {
+        "currentState": "Q6",
+        "readSymbol": "1",
+        "writtenSymbol": "1",
+        "movementDirection": "LEFT",
+        "nextState": "Q6"
+      },
+      {
+        "currentState": "Q6",
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "RIGHT",
+        "nextState": "Q8"
+      },
+      {
+        "currentState": "Q7",
+        "readSymbol": "0",
+        "writtenSymbol": "0",
         "movementDirection": "LEFT",
         "nextState": "Q7"
       },
       {
         "currentState": "Q7",
-        "readSymbol": "a",
-        "writtenSymbol": "a",
+        "readSymbol": "1",
+        "writtenSymbol": "1",
         "movementDirection": "LEFT",
         "nextState": "Q7"
       },
       {
         "currentState": "Q7",
-        "readSymbol": "b",
-        "writtenSymbol": "b",
-        "movementDirection": "LEFT",
-        "nextState": "Q7"
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "RIGHT",
+        "nextState": "Q9"
       },
       {
-        "currentState": "Q7",
-        "readSymbol": "B",
-        "writtenSymbol": "B",
+        "currentState": "Q8",
+        "readSymbol": "0",
+        "writtenSymbol": "_",
         "movementDirection": "RIGHT",
         "nextState": "Q0"
+      },
+      {
+        "currentState": "Q8",
+        "readSymbol": "1",
+        "writtenSymbol": "1",
+        "movementDirection": "STAY",
+        "nextState": "QR"
+      },
+      {
+        "currentState": "Q9",
+        "readSymbol": "1",
+        "writtenSymbol": "_",
+        "movementDirection": "RIGHT",
+        "nextState": "Q0"
+      },
+      {
+        "currentState": "Q9",
+        "readSymbol": "0",
+        "writtenSymbol": "0",
+        "movementDirection": "STAY",
+        "nextState": "QR"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "1",
+        "writtenSymbol": "1",
+        "movementDirection": "STAY",
+        "nextState": "QR"
+      },
+      {
+        "currentState": "Q4",
+        "readSymbol": "0",
+        "writtenSymbol": "0",
+        "movementDirection": "STAY",
+        "nextState": "QR"
+      },
+      {
+        "currentState": "Q0",
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "STAY",
+        "nextState": "QA"
+      },
+      {
+        "currentState": "Q5",
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "STAY",
+        "nextState": "QA"
+      },
+      {
+        "currentState": "Q3",
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "STAY",
+        "nextState": "QA"
+      },
+      {
+        "currentState": "Q4",
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "STAY",
+        "nextState": "QA"
+      },
+      {
+        "currentState": "Q8",
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "STAY",
+        "nextState": "QA"
+      },
+      {
+        "currentState": "Q9",
+        "readSymbol": "_",
+        "writtenSymbol": "_",
+        "movementDirection": "STAY",
+        "nextState": "QA"
       }
     ]
   }
+
+
+
 
 ]
